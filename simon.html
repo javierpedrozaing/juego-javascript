@@ -73,7 +73,7 @@
         window.addEventListener("keydown", onkeyDown);
         
       
-           function onkeyDown(ev){
+        function onkeyDown(ev){
             if (ev.keyCode >= 65 && ev.keyCode <= 90) {
                  if (ev.keyCode == teclaActual) {
                 activate(teclaActual, {success: true});
@@ -86,12 +86,22 @@
               }else{
                 activate(ev.keyCode, {fail: true});
                 window.removeEventListener("keydown", onkeyDown);
-                return swal("Lo siento", "Perdiste", "success", {  buttons: ["Nuevo intento", "Salir"]});
+                return swal("Perdiste", "Quieres jugar de nuevo?", {buttons: {cancel: "Cancel", catch: {text: "De nuevo", value: "again"}}}).then((value) => {
+                  window.boton = value;
+                  switch(value){
+                    case "again":
+                      let teclas = generarTeclas(niveles);
+                      siguienteNivel(0);
+                      break;
+                    default: 
+                      return swal("gracias por jugar", "", { button: false, timer: 1000});
+                  }
+                  
+                });
               }
             }else{
               return swal("Lo siento", "Perdiste, la tecla no corresponde a una letra", "success", {  buttons: ["Nuevo intento", "Salir"]});
             }
-           
 
         }
       }
